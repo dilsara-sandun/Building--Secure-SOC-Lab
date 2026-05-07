@@ -1,33 +1,41 @@
-# ELK Stack SOC Home Lab: Deployment & Troubleshooting Guide 🛡️
-A guide to deploying Elastic Stack with Windows 10 &amp; Sysmon, focusing on resolving real-world connectivity and resource issues.
+🛡️ ELK Stack SOC Home Lab: Deployment & Troubleshooting Guide
+Welcome to my SOC Home Lab project! This repository documents the end-to-end deployment of an Elastic (ELK) Stack for security monitoring, with a focus on solving the real-world technical hurdles that occur in dynamic lab environments.
 
-Overview
-This project documents the deployment of an Elastic (ELK) Stack for security monitoring, using a Windows 10 VM as the endpoint. The focus is on real-world troubleshooting of connectivity, security hardening, and resource management.
+🏗️ Lab Environment
+SIEM Platform: Elastic Stack (Elasticsearch & Kibana 8.x)
 
-Lab Environment
+Endpoint: Windows 10 VM
 
-SIEM Platform: Elastic Stack (Elasticsearch & Kibana 8.x).
+Agent: Elastic Agent managed via Fleet
 
-Endpoint: Windows 10 VM integrated via Elastic Agent.
+Logging Source: Sysmon (System Monitor) for granular event tracing
 
-Logging Source: Sysmon (System Monitor).
+Connectivity: Local host-to-VM communication
 
-Network: Local host-to-VM communication.
+🔐 Key Technical Steps & Security Hardening
+🔑 Encryption Keys Generation
+To ensure a production-grade setup and Fleet stability, I generated and configured Kibana Encryption Keys. This secures session information and saved objects within the stack.
 
-Key Technical Steps & Challenges
-1. Security Hardening
-Generated Kibana Encryption Keys to secure session information and ensure Fleet stability.
+🛠️ Challenges & Troubleshooting
+🌐 1. Resolving Connectivity & Fleet Initialization
+Issue: Encountered Unable to initialize Fleet and ETIMEDOUT errors due to host IP changes.
 
-2. Solving Connectivity Issues
-Resolved Fleet Initialization errors caused by host IP changes.
+Solution: Re-configured the Fleet Server Hosts with the updated IP (139.222.22.199) and verified the connection.
 
-Updated Fleet Server Hosts and re-configured Agent Policies to reflect the new infrastructure environment.
+🔒 2. Handling SSL/TLS Mismatches
+Issue: Certificate mismatch errors when communicating over HTTPS in a local lab setting.
 
-3. SSL/TLS Configuration
-Handled certificate mismatch issues in a lab setting by configuring ssl.verification_mode: none in Advanced YAML settings.
+Solution: Configured ssl.verification_mode: none within the Advanced YAML settings to bypass verification while maintaining encrypted flow.
 
-4. Resource Optimization
-Managed high JVM Garbage Collection (GC) overhead and memory pressure (hitting 96% RAM usage).
+🎯 3. Policy & Output Redirection
+Issue: Default Fleet outputs were locked for UI updates.
 
-Optimized background processes to prevent UI freezing and ensure stable log ingestion.
+Solution: Created a Custom Output and successfully re-assigned the Agent Policy to route telemetry data correctly.
 
+🧠 4. Resource & Memory Management
+Issue: System hit a critical 96% Memory usage peak, causing high JVM Garbage Collection (GC) overhead and UI freezing.
+
+Solution: Optimized background processes and monitored JVM metrics to stabilize the Elasticsearch service for consistent log ingestion.
+
+📈 Final Result
+After successful troubleshooting, the Elastic Agent status reached "Healthy", and real-time Sysmon logs (Event IDs 1, 3, 22) were successfully ingested into the Kibana Dashboard.
